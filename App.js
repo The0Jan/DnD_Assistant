@@ -5,6 +5,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack'
 
 import Home from './components/Home';
 import Character from './components/Character';
+import Creation from './components/Creation';
 
 const Stack = createNativeStackNavigator()
 
@@ -14,6 +15,7 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Character" component={Character} />
+        <Stack.Screen name="Creation" component={Creation} />
       </Stack.Navigator>
     </NavigationContainer>
   );
