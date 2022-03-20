@@ -4,18 +4,12 @@ import { backgroundColor } from 'react-native/Libraries/Components/View/ReactNat
 
 export default function Sheet(prop) {
 
-    function inspect_sheet(){
-        return 0;
-    }
 
     return (
-        
         <View style ={styles.item}>
-            <TouchableOpacity style = {styles.button} onPress={inspect_sheet}>
                 <Text style = {styles.level}> {prop.level} </Text>
 
                 <Text style = {styles.name}>{prop.name}</Text>
-            </TouchableOpacity>
           <StatusBar style="auto" />
         </View>
       );

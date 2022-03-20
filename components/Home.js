@@ -1,11 +1,9 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Button, ScrollView, TouchableOpacity } from 'react-native';
 
 import Sheet from './Sheet';
 
 export default function Home({navigation}) {
-
 
 
     var all_characters = [
@@ -19,15 +17,23 @@ export default function Home({navigation}) {
 
     ]
 
+    function inspect_sheet(){
+      return 0;
+  }
+
     return (
         <View style={styles.container}>
 
           <ScrollView style={styles.sheet_wrapper}>
             { 
-              all_characters.map((character) => 
+              all_characters.map((character, index) => 
               {
-                return <Sheet name={character.name} level ={character.level} />
-              })
+                return (
+                  <TouchableOpacity key={index} onPress={inspect_sheet}>
+
+                    <Sheet name={character.name} level ={character.level} />
+                  </TouchableOpacity>
+              )})
             }
           </ScrollView>
 
