@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Form, KeyboardAvoidingView, TextInput, Button, Pressable, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, KeyboardAvoidingView, TextInput, Button, Pressable, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
  ///
 
@@ -14,12 +14,15 @@ export default function Creation() {
     const [int, setInt] = useState(10);
     const [cha, setCha] = useState(10);
 
-    const [lv, setLv] = useState(0);
-
+    const [lv, setLv] = useState(1);
+    const [character_name, setName] = useState('');
     const [selectedClass, setClass] = useState('');
 
-    const [step, setStep] = useState(true);
-    var name = '';
+    const [json, setJson] = useState([]);
+    const [ready, setReady] = useState(false);
+
+    const [step, setStep] = useState(0);
+    
 
 
     // ###################################################
@@ -79,95 +82,70 @@ export default function Creation() {
     // CLASSES SECTION 
     // ###################################################
   const CLASSES = [
-  {
-    class:"artificer",
-    json: "class-artificer.json",
-  },
-  {
-    class:"barbarian",
-    json: "class-barbarian.json",
-  },
-  {
-    class:"bard",
-    json: "class-bard.json",
-  },
-  {
-    class:"cleric",
-    json: "class-cleric.json",
-  },
-  {
-    class:"druid",
-    json: "class-druid.json",
-  },
-  {
-    class:"fighter",
-    json: "class-fighter.json",
-  },
-  {
-    class:"monk",
-    json: "class-monk.json",
-  },
-  {
-    class:"paladin",
-    json: "class-paladin.json",
-  },
-  {
-    class:"ranger",
-    json: "class-ranger.json",
-  },
-  {
-    class:"rogue",
-    json: "class-rogue.json",
-  },
-  {
-    class:"sorcerer",
-    json: "class-sorcerer.json",
-  },
-  {
-    class:"warlock",
-    json: "class-warlock.json",
-  },
-  {
-    class:"wizard",
-    json: "class-wizard.json",
-  }
+  { name:"barbarian"},
+  { name:"bard"},
+  { name:"cleric"},
+  { name:"druid"},
+  { name:"fighter"},
+  { name:"monk"},
+  { name:"paladin"},
+  { name:"ranger"},
+  { name:"rogue"},
+  { name:"sorcerer"},
+  { name:"warlock"},
+  { name:"wizard"}
   ];
 
 
   const Item = ({ item, onPress, backgroundColor, textColor }) => (
     <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
-      <Text style={[styles.title, textColor]}>{item.class}</Text>
+      <Text style={[styles.title, textColor]}>{item.name}</Text>
     </TouchableOpacity>
   );
 
   const renderItem = ({ item }) => {
-    const backgroundColor = item.class === selectedClass ? "#6e3b6e" : "#f9c2ff";
-    const color = item.class === selectedClass ? 'white' : 'black';
+    const backgroundColor = item.name === selectedClass ? "#6e3b6e" : "#f9c2ff";
+    const color = item.name === selectedClass ? 'white' : 'black';
   
     return (
       <Item
         item={item}
-        onPress={() => setClass(item.class)}
+        onPress={() => setClass(item.name)}
         backgroundColor={{ backgroundColor }}
         textColor={{ color }}
       />
     );
     };
 
+    // ###################################################
+    // SUBCLASS SECTION 
+    // ###################################################
+    
+    
 
-   
+
+
     // ###################################################
     // ALL SECTION 
     // ###################################################
 
+    function getJson(){
+      fetch(`https://5e.tools/data/class/class-${selectedClass}.json`, {method: 'GET'})
+      .then( (response) => response.json())
+      .then( (responseJson) => {setJson(responseJson)})
+      .then( () => setReady(true))
+
+    }
+
+
     const Creation_step = () =>{
-      if (step){
+      if (step == 0){
       return(
       <KeyboardAvoidingView>
         <Stat stat_name = {'LV.'} stat_count={lv} change_stat= {setLv} />
 
         <Text>Character Name:</Text>
-        <TextInput style={styles.character_name} placeholder={'Character name'} />
+        <TextInput style={styles.character_name} placeholder={character_name}  onEndEditing={() => setName(character_name)}/>
         <View style = {styles.row}>
           <Stat stat_name = {'STR'} stat_count={str} change_stat= {setStr} />
           <Stat stat_name = {'CON'} stat_count={con} change_stat= {setCon} />
@@ -180,29 +158,53 @@ export default function Creation() {
           <Stat stat_name = {'INT'} stat_count={int} change_stat= {setInt} />
           <Stat stat_name = {'CHA'} stat_count={cha} change_stat= {setCha} />
         </View>
+      <Button onPress={() => setStep(1)} title = "Save stats"/>
       </KeyboardAvoidingView>
       )}
-      else {
+      else if(step == 1) {
+
+
       return(
       <SafeAreaView style={styles.container}>
         <FlatList
           data={CLASSES}
           renderItem={renderItem}
-          keyExtractor={(item) => item.class}
+          keyExtractor={(item) => item.name}
           extraData={selectedClass}
         />
+      <Button onPress={() => {setStep(2); getJson()}} title = "Save Class"/>
       </SafeAreaView>
       )}
+      else if(step ==2 ){
+      
+        if(ready != true){
+          return (
+          <Text>
+          {"wait bitch"}
+          </Text>
+          )}
+        else{
+         return(
+
+        <SafeAreaView style={styles.container}>
+          <FlatList
+            data={json.subclass}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.name}
+            extraData={selectedClass}
+          />
+        <Button onPress={() => {setStep(2)}} title = "Create Character Sheet"/>
+        </SafeAreaView>
+        )}}
     };
 
 
     
 
-
+  // To co właściwie renderuje
     return (
         <View style={styles.container}>
           <Creation_step/>
-          <Button onPress={() => setStep(false)} title = "proceed"/>
         </View>   
       );
 }
