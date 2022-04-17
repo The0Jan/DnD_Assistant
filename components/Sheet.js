@@ -7,7 +7,7 @@ export default function Sheet(prop) {
 
     return (
         <View style ={styles.item}>
-                <Text style = {styles.level}> {prop.level} </Text>
+                <Text style = {styles.level}> {prop.class} </Text>
 
                 <Text style = {styles.name}>{prop.name}</Text>
           <StatusBar style="auto" />

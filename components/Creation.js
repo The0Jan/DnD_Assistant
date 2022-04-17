@@ -1,12 +1,13 @@
 import { StyleSheet, Text, View, KeyboardAvoidingView, TextInput, Button, Pressable, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
  ///
 
 
  // Trzeba zmienić wygląd przycisków 
  // i to jakoś wszystko uporządkować
 
-export default function Creation() {
+export default function Creation({navigation}) {
     const [str, setStr] = useState(10);
     const [dex, setDex] = useState(10);
     const [con, setCon] = useState(10);
@@ -17,6 +18,7 @@ export default function Creation() {
     const [lv, setLv] = useState(1);
     const [character_name, setName] = useState('');
     const [selectedClass, setClass] = useState('');
+    const [selectedSubclass, setSubclass] = useState('');
 
     const [json, setJson] = useState([]);
     const [ready, setReady] = useState(false);
@@ -103,7 +105,7 @@ export default function Creation() {
     </TouchableOpacity>
   );
 
-  const renderItem = ({ item }) => {
+  const renderClass = ({ item }) => {
     const backgroundColor = item.name === selectedClass ? "#6e3b6e" : "#f9c2ff";
     const color = item.name === selectedClass ? 'white' : 'black';
   
@@ -121,7 +123,19 @@ export default function Creation() {
     // SUBCLASS SECTION 
     // ###################################################
     
+    const renderSubclass = ({ item }) => {
+      const backgroundColor = item.name === selectedSubclass ? "#6e3b6e" : "#f9c2ff";
+      const color = item.name === selectedSubclass ? 'white' : 'black';
     
+      return (
+        <Item
+          item={item}
+          onPress={() => setSubclass(item.name)}
+          backgroundColor={{ backgroundColor }}
+          textColor={{ color }}
+        />
+      );
+      };
 
 
 
@@ -134,18 +148,64 @@ export default function Creation() {
       .then( (response) => response.json())
       .then( (responseJson) => {setJson(responseJson)})
       .then( () => setReady(true))
-
     }
 
+    const storeData = async(value) =>{
+      try {
+        const keyed = { name :value.name,class: value.class[0].name}
+        const key = JSON.stringify(keyed)
+        const JValue = JSON.stringify(value)
+        await AsyncStorage.setItem(key, JValue)
+      } catch(e){
+        console.log(e)
+      }
+    }
 
-    const Creation_step = () =>{
+    function generateSheet(){
+      var sheet = {
+        name: character_name,
+        level: lv,
+        stats: 
+        {
+          STR:str,
+          DEX:dex,
+          CON:con,
+          INT:int,
+          WIS:wis,
+          CHA:cha
+        },
+        class: json.class,
+        subclass: selectedSubclass,
+        classFeatures: json.classFeatures,
+        subclassFeatures: []
+      };
+
+      var sub_found;
+      for (var suby in json.subclass){
+
+        if (json.subclass[suby].name == selectedSubclass){
+          sub_found = json.subclass[suby].shortName;
+        }
+      }
+      
+      for (var feat in json.subclassFeature){
+        if(json.subclassFeature[feat].subclassShortName == sub_found){
+          sheet.subclassFeatures.push(json.subclassFeature[feat]);
+        }
+      }
+
+      storeData(sheet);
+    }
+
+    function Creation_step(){
       if (step == 0){
       return(
+      <View>
+        <Text>Character Name:</Text>
+        <TextInput style={styles.character_name} value={character_name}  onChangeText={setName}/>
       <KeyboardAvoidingView>
         <Stat stat_name = {'LV.'} stat_count={lv} change_stat= {setLv} />
 
-        <Text>Character Name:</Text>
-        <TextInput style={styles.character_name} placeholder={character_name}  onEndEditing={() => setName(character_name)}/>
         <View style = {styles.row}>
           <Stat stat_name = {'STR'} stat_count={str} change_stat= {setStr} />
           <Stat stat_name = {'CON'} stat_count={con} change_stat= {setCon} />
@@ -158,8 +218,12 @@ export default function Creation() {
           <Stat stat_name = {'INT'} stat_count={int} change_stat= {setInt} />
           <Stat stat_name = {'CHA'} stat_count={cha} change_stat= {setCha} />
         </View>
-      <Button onPress={() => setStep(1)} title = "Save stats"/>
+      <Button 
+        onPress={() => setStep(1)} 
+        title = "Save stats" 
+        disabled={character_name == '' ? true: false}/>
       </KeyboardAvoidingView>
+      </View>
       )}
       else if(step == 1) {
 
@@ -168,11 +232,18 @@ export default function Creation() {
       <SafeAreaView style={styles.container}>
         <FlatList
           data={CLASSES}
-          renderItem={renderItem}
+          renderItem={renderClass}
           keyExtractor={(item) => item.name}
           extraData={selectedClass}
         />
-      <Button onPress={() => {setStep(2); getJson()}} title = "Save Class"/>
+      <Button 
+        onPress={() => {setStep(2); getJson()}} 
+        title = "Save Class"
+        disabled = {selectedClass == '' ? true: false}/>
+
+      <Button
+        onPress={() => setStep(0)}
+        title = "Go back" />
       </SafeAreaView>
       )}
       else if(step ==2 ){
@@ -189,11 +260,18 @@ export default function Creation() {
         <SafeAreaView style={styles.container}>
           <FlatList
             data={json.subclass}
-            renderItem={renderItem}
+            renderItem={renderSubclass}
             keyExtractor={(item) => item.name}
-            extraData={selectedClass}
+            extraData={selectedSubclass}
           />
-        <Button onPress={() => {setStep(2)}} title = "Create Character Sheet"/>
+        <Button 
+          onPress={() => {generateSheet(); navigation.navigate('Home') }} 
+          title = "Create Character Sheet"
+          disabled = {selectedSubclass == '' ? true: false}/>
+          
+        <Button
+          onPress={() => setStep(1)}
+          title = "Go back" />
         </SafeAreaView>
         )}}
     };

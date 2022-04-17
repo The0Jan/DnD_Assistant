@@ -1,21 +1,27 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { StyleSheet, Text, View, Button, ScrollView, TouchableOpacity } from 'react-native';
-
+import { useEffect, useState } from 'react';
 import Sheet from './Sheet';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Home({navigation}) {
+    const [all_characters, setCharacters] = useState([]);
 
+    useEffect(() => {
+      async function fetchSheets(){
+        try {
+          const keys = await AsyncStorage.getAllKeys()
 
-    var all_characters = [
-      {name :"grogu", level:19},
-      {name: "boy", level:1},
-      {name: "natasha", level:3},
-      {name: "doy ", level:13},
-      {name: "natassha", level:12},
-      {name: "soy", level:14},
-
-
-    ]
+          const parsed_keys = []
+          keys.forEach((item,index) => {parsed_keys[index] = JSON.parse(item)})
+          setCharacters(parsed_keys)
+        } 
+        catch(e) {
+          console.log(e)
+        }
+      }
+      fetchSheets()
+    });
 
     function inspect_sheet(){
       return 0;
@@ -31,7 +37,7 @@ export default function Home({navigation}) {
                 return (
                   <TouchableOpacity key={index} onPress={inspect_sheet}>
 
-                    <Sheet name={character.name} level ={character.level} />
+                    <Sheet name={character.name} class ={character.class} />
                   </TouchableOpacity>
               )})
             }
