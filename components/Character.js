@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 
 export default function Character({route, navigation}) {
 
@@ -10,31 +10,71 @@ export default function Character({route, navigation}) {
   }
 
 
-  function  Stats(stat_name, stat_amount)
+
+  function Stats(stat_name, stat_amount, color)
   {
+    const statistics = StyleSheet.create({
+      StatRow: {
+        flexDirection: 'row',
+        textAlign:'center',
+        justifyContent:'space-between',
+        backgroundColor: color,
+        marginBottom:10,
+        marginHorizontal:10,
+        borderRadius: 10,
+        borderColor: color,
+        borderWidth: 5,
+      },
+
+    })
     return (
-      <View>
-        <Text>{stat_name} </Text>
-        <Text>{stat_amount} </Text>
+      <View style={statistics.StatRow}>
+        <View style={styles.StatBox}>
+          <Text style={texts.name}>{stat_name}</Text>
+        </View>
+        <View style={styles.StatRest}>
+          <Text style={texts.amount}>{stat_amount}</Text>
+        </View>
       </View>
     )
   }
-//        <Stats stat_name={"DEX"} stat_amount={character.stats.DEX}></Stats>
 
 
 
   return (
     <View style={styles.container}>
       <View style={styles.item}>
-        <Text>Character</Text>
-        <Text>{character.name}</Text>
-        <Text>{character.class}</Text>
-        <StatusBar style="auto" />
+        <View style={styles.character_name}>
+          <Text style={texts.character_name}>{character.name}</Text>
+        </View>
+        <View style={styles.character_level}>
+          <Text style={texts.character_name}>LV.17</Text>
+        </View>
       </View>
 
+
+      <View style={{height:'70%'}}>
+        {Stats("STR", 17, "orangered")}
+        {Stats("DEX", 17, "olivedrab")}
+        {Stats("CON", 17, "orange")}
+        {Stats("INT", 17, "mediumturquoise")}
+        {Stats("WIS", 17, "lightslategrey")}
+        {Stats("CHA", 17, "orchid")}
+      </View>
+
+
       <View style = {styles.button_create}>
-      <Button 
+
+        <Button 
         title="Abilities"
+        onPress = { () => inspect_abilities(character)}
+        />
+        <Button 
+        title="Spells"
+        onPress = { () => inspect_abilities(character)}
+        />
+        <Button 
+        title="Configure"
         onPress = { () => inspect_abilities(character)}
         />
       </View>
@@ -42,28 +82,72 @@ export default function Character({route, navigation}) {
   );
 }
 
+
+const texts = StyleSheet.create({
+    character_name:{
+      flexShrink:1,
+      flexWrap:'wrap',
+      textAlign:"center",
+      fontSize:30,
+    },
+    name:{
+      textAlign:"center",
+      fontSize:30,
+      color:"#FFFF"
+    },
+    amount:{
+      textAlign:"center",
+      fontSize:30,
+    }
+})
+
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#333',
-      alignItems: 'center',
-      justifyContent: 'center',
+      backgroundColor: '#FAEBD7',
     },
+
     item: {
-      backgroundColor: '#FFF',
-      padding: 10,
-      borderRadius: 10,
+      flexShrink:1,
+      backgroundColor: '#F0F8FF',
+      padding: 15,
       flexDirection: 'row',
-      alignContent: 'center',
-      justifyContent: 'space-between',
-      marginBottom: 20
+      marginBottom: 20,
+      borderBottomWidth:5,
+      borderTopWidth :5,
+      borderColor:'goldenrod',
+      alignItems:'center',
+    },
+
+    character_name:
+    {
+      alignContent:'center',
+      borderRightColor:'goldenrod',
+      borderRightWidth:5,
+      width:'77%',
+      flexShrink:1,
+    },
+
+    character_level:{
+      width:'23%',
     },
     button_create: {
-      bottom: 15,
+      flexDirection:'row',
       paddingHorizontal:15,
       paddingVertical: 15,
-      flex: 1,
-      justifyContent: 'flex-end'
-      
+      flex:1,
+      justifyContent:'space-evenly',
+
+      height:'10%'
+    },
+
+    StatBox:{
+      width:"40%",
+    },
+    StatRest:{
+      borderRadius:10,
+      backgroundColor:'#FFFF',
+      width:"40%",
     }
+
   });

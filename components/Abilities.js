@@ -13,9 +13,9 @@ export default function Abilities({route, navigation}) {
     <View style={styles.container}>
       <View style={styles.item}>
         <Text>Abilities</Text>
-        <Text>{character.name}</Text>
         <Text>{character.class}</Text>
-        <StatusBar style="auto" />
+        <Text>{character.name}</Text>
+
       </View>
 
       <View style = {styles.button_create}>
