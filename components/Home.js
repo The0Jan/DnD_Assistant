@@ -23,9 +23,9 @@ export default function Home({navigation}) {
       fetchSheets()
     });
 
-    function inspect_sheet(){
-      return 0;
-  }
+    function inspect_sheet(character){
+        navigation.navigate('Character', {character});
+    }
 
     return (
         <View style={styles.container}>
@@ -35,7 +35,7 @@ export default function Home({navigation}) {
               all_characters.map((character, index) => 
               {
                 return (
-                  <TouchableOpacity key={index} onPress={inspect_sheet}>
+                  <TouchableOpacity key={index} onPress={()=>inspect_sheet(character)}>
 
                     <Sheet name={character.name} class ={character.class} />
                   </TouchableOpacity>

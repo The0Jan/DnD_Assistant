@@ -1,32 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
 
-export default function Character({route, navigation}) {
+export default function Abilities({route, navigation}) {
 
   const {character} = route.params;
 
   function inspect_abilities(character){
-    navigation.navigate('Abilities', {character});
+    navigation.navigate('Character', {character});
   }
-
-
-  function  Stats(stat_name, stat_amount)
-  {
-    return (
-      <View>
-        <Text>{stat_name} </Text>
-        <Text>{stat_amount} </Text>
-      </View>
-    )
-  }
-//        <Stats stat_name={"DEX"} stat_amount={character.stats.DEX}></Stats>
-
-
-
+  
   return (
     <View style={styles.container}>
       <View style={styles.item}>
-        <Text>Character</Text>
+        <Text>Abilities</Text>
         <Text>{character.name}</Text>
         <Text>{character.class}</Text>
         <StatusBar style="auto" />
