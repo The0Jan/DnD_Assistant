@@ -1,17 +1,20 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Character({route, navigation}) {
   const {character} = route.params;
+  const [my_character, setCharacter] = useState({});
+
+  useEffect(() => {
+    AsyncStorage.getItem(JSON.stringify(character))
+    .then((value) => {
+      var parsed = JSON.parse(value);
+      setCharacter(parsed)})
+  });
 
 
-
-
-
-  function inspect_abilities(char){
-    navigation.navigate('Abilities', {char});
-  }
-
-  function Stats(stat_name, stat_amount, color)
+  function Stat(stat_name, stat_amount, color)
   {
     const statistics = StyleSheet.create({
       StatRow: {
@@ -25,7 +28,6 @@ export default function Character({route, navigation}) {
         borderColor: color,
         borderWidth: 5,
       },
-
     })
     return (
       <View style={statistics.StatRow}>
@@ -39,44 +41,52 @@ export default function Character({route, navigation}) {
     )
   }
 
-
+  function ShowcaseStats(character_stats)
+  {
+    if(typeof(character_stats)!="undefined")
+    {
+      return(
+        <View style={{height:'70%'}}>
+          {Stat("STR", character_stats.STR, "orangered")}
+          {Stat("DEX", character_stats.DEX, "olivedrab")}
+          {Stat("CON", character_stats.CON, "orange")}
+          {Stat("INT", character_stats.INT, "mediumturquoise")}
+          {Stat("WIS", character_stats.WIS, "lightslategrey")}
+          {Stat("CHA", character_stats.CHA, "orchid")}
+        </View>
+      )
+    }
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.item}>
         <View style={styles.character_name}>
-          <Text style={texts.character_name}>{character.name}</Text>
+          <Text style={texts.character_name}>{my_character.name}</Text>
         </View>
         <View style={styles.character_level}>
-          <Text style={texts.character_name}>LV.17</Text>
+          <Text style={texts.character_name}>LV.{my_character.level}</Text>
         </View>
       </View>
+      
+      {ShowcaseStats(my_character.stats)}
 
-
-      <View style={{height:'70%'}}>
-        {Stats("STR", 17, "orangered")}
-        {Stats("DEX", 17, "olivedrab")}
-        {Stats("CON", 17, "orange")}
-        {Stats("INT", 17, "mediumturquoise")}
-        {Stats("WIS", 17, "lightslategrey")}
-        {Stats("CHA", 17, "orchid")}
-      </View>
 
 
       <View style = {styles.button_create}>
-        <TouchableOpacity onPress={()=>inspect_abilities(character)}>
+        <TouchableOpacity onPress={()=>navigation.navigate('Abilities', {character})}>
           <View style={styles.button}>
             <Text style={{color:'white', fontSize:20}}>ABILITIES</Text>
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={()=>inspect_abilities(character)}>
+        <TouchableOpacity onPress={()=>navigation.navigate('Abilities', {character})}>
           <View style={styles.button}>
             <Text style={{color:'white', fontSize:20}}>SPELLS</Text>
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={()=>inspect_abilities(character)}>
+        <TouchableOpacity onPress={()=>navigation.navigate('Abilities', {character})}>
           <View style={styles.button}>
             <Text style={{color:'white', fontSize:20}}>CONFIG</Text>
           </View>

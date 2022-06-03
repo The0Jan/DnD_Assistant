@@ -4,9 +4,7 @@ export default function Abilities({route, navigation}) {
 
   const {character} = route.params;
 
-  function inspect_abilities(character){
-    navigation.navigate('Character', {character});
-  }
+
   
   return (
     <View style={styles.container}>
@@ -25,6 +23,10 @@ export default function Abilities({route, navigation}) {
       </View>
     </View>
   );
+}
+
+function inspect_abilities(character){
+  navigation.navigate('Character', {character});
 }
 
 const styles = StyleSheet.create({
