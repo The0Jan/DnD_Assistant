@@ -251,7 +251,7 @@ export default function Creation({navigation}) {
         if(ready != true){
           return (
           <Text>
-          {"wait bitch"}
+          {"Loading..."}
           </Text>
           )}
         else{
@@ -274,7 +274,7 @@ export default function Creation({navigation}) {
           title = "Go back" />
         </SafeAreaView>
         )}}
-    };
+    }
 
 
     

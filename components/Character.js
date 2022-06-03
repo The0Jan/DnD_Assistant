@@ -1,15 +1,15 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 export default function Character({route, navigation}) {
-
   const {character} = route.params;
 
-  function inspect_abilities(character){
-    navigation.navigate('Abilities', {character});
+
+
+
+
+  function inspect_abilities(char){
+    navigation.navigate('Abilities', {char});
   }
-
-
 
   function Stats(stat_name, stat_amount, color)
   {
@@ -64,19 +64,23 @@ export default function Character({route, navigation}) {
 
 
       <View style = {styles.button_create}>
+        <TouchableOpacity onPress={()=>inspect_abilities(character)}>
+          <View style={styles.button}>
+            <Text style={{color:'white', fontSize:20}}>ABILITIES</Text>
+          </View>
+        </TouchableOpacity>
 
-        <Button 
-        title="Abilities"
-        onPress = { () => inspect_abilities(character)}
-        />
-        <Button 
-        title="Spells"
-        onPress = { () => inspect_abilities(character)}
-        />
-        <Button 
-        title="Configure"
-        onPress = { () => inspect_abilities(character)}
-        />
+        <TouchableOpacity onPress={()=>inspect_abilities(character)}>
+          <View style={styles.button}>
+            <Text style={{color:'white', fontSize:20}}>SPELLS</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={()=>inspect_abilities(character)}>
+          <View style={styles.button}>
+            <Text style={{color:'white', fontSize:20}}>CONFIG</Text>
+          </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -137,8 +141,14 @@ const styles = StyleSheet.create({
       paddingVertical: 15,
       flex:1,
       justifyContent:'space-evenly',
-
       height:'10%'
+    },
+
+    button:{
+      backgroundColor:'grey',
+      borderColor:'grey',
+      borderRadius:5,
+      borderWidth:6,
     },
 
     StatBox:{

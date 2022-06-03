@@ -1,5 +1,4 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { StyleSheet, Text, View, Button, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Button, ScrollView, TouchableOpacity } from 'react-native';
 import { useEffect, useState } from 'react';
 import Sheet from './Sheet';
 import AsyncStorage from '@react-native-async-storage/async-storage';
