@@ -2,18 +2,22 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 
 export default function Abilities({route, navigation}) {
 
-  const {character} = route.params;
+  const {my_character} = route.params;
 
-
+  function print(thing)
+  {
+    console.log(thing)
+  }
   
   return (
     <View style={styles.container}>
       <View style={styles.item}>
-        <Text>Abilities</Text>
-        <Text>{character.class}</Text>
-        <Text>{character.name}</Text>
+        <Text>{my_character.class.source}</Text>
+        <Text>{my_character.subclass}</Text>
 
       </View>
+
+      {print(my_character.classFeatures)}
 
       <View style = {styles.button_create}>
       <Button 

@@ -176,7 +176,7 @@ export default function Creation({navigation}) {
         },
         class: json.class,
         subclass: selectedSubclass,
-        classFeatures: json.classFeatures,
+        classFeatures: json.classFeature,
         subclassFeatures: []
       };
 

@@ -74,7 +74,7 @@ export default function Character({route, navigation}) {
 
 
       <View style = {styles.button_create}>
-        <TouchableOpacity onPress={()=>navigation.navigate('Abilities', {character})}>
+        <TouchableOpacity onPress={()=>navigation.navigate('Abilities', {my_character})}>
           <View style={styles.button}>
             <Text style={{color:'white', fontSize:20}}>ABILITIES</Text>
           </View>
