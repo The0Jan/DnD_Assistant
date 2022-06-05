@@ -27,44 +27,63 @@ export default function Creation({navigation}) {
       changeStat(new_stat);
     }
 
-    const Stat = (prop) => {
+    function Stats(stat_name, stat_count, color, change_stat)
+    {
 
       let plus = false;
-      if (prop.stat_count >= 20){
+      if (stat_count >= 20){
         plus = true;
       }
 
       let minus = false;
-      if (prop.stat_count <= 0){
+      if (stat_count <= 1){
         minus = true;
       }
-
+      const statistics = StyleSheet.create({
+        StatRow: {
+          flexDirection: 'row',
+          textAlign:'center',
+          justifyContent:'space-between',
+          backgroundColor: color,
+          marginBottom:10,
+          marginHorizontal:10,
+          borderRadius: 10,
+          borderColor: color,
+          borderWidth: 5,
+        },
+      })
       return (
-      <View style = {styles.stat}>
-        <Text style = {styles.name}> {prop.stat_name}</Text>
-        <Text style = {styles.count}> {prop.stat_count}</Text>
+        <View style={statistics.StatRow}>
+          <View style={styles.StatBox}>
+            <Text style={texts.name}>{stat_name}</Text>
+          </View>
+          <View style={styles.StatRest}>
+            <Text style={texts.amount}>{stat_count}</Text>
+          </View>
 
-        <Pressable 
-          style= {styles.up} 
-          onPress={ () => add(prop.stat_count, prop.change_stat)}
-          disabled = {plus}>
-             <Text>
-               {"+"}
-             </Text>
-        </Pressable>
+          <View>
+          <Pressable 
+            style= {styles.press} 
+            onPress={ () => add(stat_count, change_stat)}
+            disabled = {plus}>
+              <Text style={texts.press}>+</Text>
+          </Pressable>
+          </View>
 
-        <Pressable 
-          style= {styles.down} 
-          onPress={ () => sub(prop.stat_count, prop.change_stat)}
-          disabled = {minus}>
-             <Text>
-               {"-"}
-             </Text>
-        </Pressable>
+          <View>
+          <Pressable 
+            style= {styles.press} 
+            onPress={ () => sub(stat_count, change_stat)}
+            disabled = {minus}>
+              <Text style={texts.press}>-</Text>
+          </Pressable>
+          </View>
 
-      </View>
+        </View>
       )
     }
+
+
 
     function NextCreationStep()
     {
@@ -84,43 +103,101 @@ export default function Creation({navigation}) {
     
     return (
         <View style={styles.container}>
-          <View>
-            <Text>Character Name:</Text>
-            <TextInput style={styles.character_name} value={character_name}  onChangeText={setName}/>
-          <KeyboardAvoidingView>
-            <Stat stat_name = {'LV.'} stat_count={lv} change_stat= {setLv} />
+          <View style={{height:"90%"}}>
+          <View style={{flexDirection: 'row',
+          textAlign:'center',
+          backgroundColor: 'darkgoldenrod',
+          marginBottom:5,
+          marginTop:10,
+          marginHorizontal:10,
+          borderRadius: 10,
+          borderColor: 'darkgoldenrod',
+          borderWidth: 5,
+          alignContent:'center'}}>
 
-            <View style = {styles.row}>
-              <Stat stat_name = {'STR'} stat_count={str} change_stat= {setStr} />
-              <Stat stat_name = {'CON'} stat_count={con} change_stat= {setCon} />
+
+            <View style={{alignItems:'center',alignSelf:'center', flexWrap:'wrap'}}>
+              <TextInput style={{      
+                                borderRadius:10,
+                                backgroundColor:'#FFFF',
+                                fontSize:32,
+                                flexShrink:10,
+                                marginRight:10,
+                                marginLeft:10}} 
+                        placeholder= "Your character name ..."  
+                        value={character_name}  
+                        onChangeText={setName}/>
             </View>
-            <View style = {styles.row}>
-              <Stat stat_name = {'DEX'} stat_count={dex} change_stat= {setDex} />
-              <Stat stat_name = {'WIS'} stat_count={wis} change_stat= {setWis} />
-            </View>
-            <View style = {styles.row}>
-              <Stat stat_name = {'INT'} stat_count={int} change_stat= {setInt} />
-              <Stat stat_name = {'CHA'} stat_count={cha} change_stat= {setCha} />
-            </View>
-          <Button 
-            onPress={() => NextCreationStep()} 
-            title = "Save stats" 
-            disabled={character_name == '' ? true: false}/>
+
+          </View>
+
+
+          <KeyboardAvoidingView>
+          {Stats("LV.", lv, "darkgoldenrod", setLv)}
+          {Stats("STR", str, "orangered", setStr)}
+          {Stats("DEX", dex, "olivedrab", setDex)}
+          {Stats("CON", con, "orange", setCon)}
+          {Stats("INT", int, "mediumturquoise", setInt)}
+          {Stats("WIS", wis, "lightslategrey", setWis)}
+          {Stats("CHA", cha, "orchid", setCha)}
+
+
           </KeyboardAvoidingView>
           </View>
+          <KeyboardAvoidingView>
+          <View style={{borderRadius:5, margin:10 }}>
+            <Button 
+              onPress={() => NextCreationStep()} 
+              title = "Save stats" 
+              disabled={character_name == '' ? true: false}/>
+          </View>
+          </KeyboardAvoidingView>
+
+
         </View>   
       );
 }
 
-
+const texts = StyleSheet.create({
+  character_name:{
+    flexShrink:1,
+    flexWrap:'wrap',
+    textAlign:"center",
+    fontSize:30,
+    width:"80%"
+  },
+  name:{
+    textAlign:"center",
+    fontSize:32,
+    color:"#FFFF"
+  },
+  amount:{
+    textAlign:"center",
+    fontSize:36,
+  },
+  press:{
+    fontSize:36,
+    color:'black'
+  }
+})
 
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: '#FAEBD7',
     },
-    character_name:{},
+    character_name:{
+      backgroundColor:'green',
 
+
+    },
+    name_input:{
+      flexDirection:'row',
+      borderColor:'black',
+      borderWidth:3,
+      margin:10,
+      backgroundColor:'white'
+    },
     stat:{
       backgroundColor: '#ece4e2',
       padding: 10,
@@ -129,41 +206,29 @@ const styles = StyleSheet.create({
       alignContent: 'center',
       justifyContent: 'space-between',
       marginBottom: 20
-  },
+    },
     name:{
       marginRight: 15,
     },
-    count:{
-      width: 24,
-      height: 24,
-      backgroundColor: '#55BCF6',
-      opacity: 0.6,
+    press:{
+      width: 36,
+      backgroundColor: '#F0FFFF',
       borderRadius: 5,
-      marginRight: 15
-  },
-    up:{
-      width: 24,
-      height: 24,
-      backgroundColor: '#55BCF6',
-      opacity: 0.6,
-      borderRadius: 5,
-      marginRight: 15,
-      marginLeft:15,
-      color: '#ef1e1e'
+      marginRight: 5,
+      marginLeft:5,
+      alignItems:'center'
     },
-    down:{
-      width: 24,
-      height: 24,
-      backgroundColor: '#55BCF6',
-      opacity: 0.6,
-      borderRadius: 5,
-      marginRight: 15,
-      marginLeft:15,
-      color: '#ef1e1e'
-    },
-
 
     row: {
       flexDirection: 'row'
+    },
+
+    StatBox:{
+      width:"20%",
+    },
+    StatRest:{
+      borderRadius:10,
+      backgroundColor:'#FFFF',
+      width:"30%",
     }
   });

@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Button, ScrollView,TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import  Modal  from 'react-native-modal';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export default function Abilities({route, navigation}) {
   const [isModalVisible, setModalVisible] = useState(false)
