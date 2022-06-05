@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -58,6 +58,21 @@ export default function Character({route, navigation}) {
     }
   }
 
+  function DeleteCharacter(char)
+  {
+    removeItemValue(char)
+    navigation.navigate("Home")
+  }
+
+  function removeItemValue(key) {
+    try {
+        AsyncStorage.removeItem(key);
+        return true;
+    }
+    catch(exception) {
+        return false;
+    }
+  }
   return (
     <View style={styles.container}>
       <View style={styles.item}>
@@ -88,9 +103,27 @@ export default function Character({route, navigation}) {
 
         <TouchableOpacity onPress={()=>navigation.navigate('Abilities', {character})}>
           <View style={styles.button}>
-            <Text style={{color:'white', fontSize:20}}>CONFIG</Text>
+            <Text style={{color:'white', fontSize:20}}>EDIT</Text>
           </View>
         </TouchableOpacity>
+
+        <TouchableOpacity onPress={
+          ()=>Alert.alert(
+            "Warning",
+            "Are you sure you want to delete this character sheet? This action can not be reverted.",
+            [
+              {
+                text: "Cancel",
+                style: "cancel"
+              },
+              { text: "Accept", onPress: () => DeleteCharacter(JSON.stringify(character)) }
+            ]
+            )}>
+          <View style={styles.button}>
+            <Text style={{color:'white', fontSize:20}}>DELETE</Text>
+          </View>
+        </TouchableOpacity>
+
       </View>
     </View>
   );
