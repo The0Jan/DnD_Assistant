@@ -1,21 +1,17 @@
 import { StyleSheet, Text, View, KeyboardAvoidingView, TextInput, Button, Pressable, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+ ///
 
 
-export default function Creation({navigation}) {
-    const [str, setStr] = useState(10);
-    const [dex, setDex] = useState(10);
-    const [con, setCon] = useState(10);
-    const [wis, setWis] = useState(10);
-    const [int, setInt] = useState(10);
-    const [cha, setCha] = useState(10);
+ // Trzeba zmienić wygląd przycisków 
+ // i to jakoś wszystko uporządkować
 
-    const [lv, setLv] = useState(1);
+export default function ClassSelection({route, navigation}) {
+
+    const {name, level, stats} = route.params;
+
     const [character_name, setName] = useState('');
-
-
-
     const [selectedClass, setClass] = useState('');
     const [selectedSubclass, setSubclass] = useState('');
 
@@ -162,17 +158,9 @@ export default function Creation({navigation}) {
 
     function generateSheet(){
       var sheet = {
-        name: character_name,
-        level: lv,
-        stats: 
-        {
-          STR:str,
-          DEX:dex,
-          CON:con,
-          INT:int,
-          WIS:wis,
-          CHA:cha
-        },
+        name: name,
+        level: level,
+        stats: stats,
         class: json.class,
         subclass: selectedSubclass,
         classFeatures: json.classFeature,
@@ -197,34 +185,7 @@ export default function Creation({navigation}) {
     }
 
     function Creation_step(){
-      if (step == 0){
-      return(
-      <View>
-        <Text>Character Name:</Text>
-        <TextInput style={styles.character_name} value={character_name}  onChangeText={setName}/>
-      <KeyboardAvoidingView>
-        <Stat stat_name = {'LV.'} stat_count={lv} change_stat= {setLv} />
-
-        <View style = {styles.row}>
-          <Stat stat_name = {'STR'} stat_count={str} change_stat= {setStr} />
-          <Stat stat_name = {'CON'} stat_count={con} change_stat= {setCon} />
-        </View>
-        <View style = {styles.row}>
-          <Stat stat_name = {'DEX'} stat_count={dex} change_stat= {setDex} />
-          <Stat stat_name = {'WIS'} stat_count={wis} change_stat= {setWis} />
-        </View>
-        <View style = {styles.row}>
-          <Stat stat_name = {'INT'} stat_count={int} change_stat= {setInt} />
-          <Stat stat_name = {'CHA'} stat_count={cha} change_stat= {setCha} />
-        </View>
-      <Button 
-        onPress={() => setStep(1)} 
-        title = "Save stats" 
-        disabled={character_name == '' ? true: false}/>
-      </KeyboardAvoidingView>
-      </View>
-      )}
-      else if(step == 1) {
+    if(step == 0) {
 
 
       return(
@@ -238,20 +199,15 @@ export default function Creation({navigation}) {
 
       <View style={{marginBottom:5, borderRadius:20, marginLeft:5,}}>
         <Button 
-          onPress={() => {setStep(2); getJson()}} 
+          onPress={() => {setStep(1); getJson()}} 
           title = "Save Class"
           disabled = {selectedClass == '' ? true: false}/>
       </View>
 
-      <View style={{borderRadius:20, marginLeft:5,}}>
-      <Button
-        onPress={() => setStep(0)}
-        title = "Go back" />
-      </View>
 
       </SafeAreaView>
       )}
-      else if(step ==2 ){
+      else if(step ==1 ){
       
         if(ready != true){
           return (
@@ -278,7 +234,7 @@ export default function Creation({navigation}) {
           </View>
           <View style={{borderRadius:20, marginLeft:5,}}>
           <Button
-            onPress={() => setStep(1)}
+            onPress={() => setStep(0)}
             title = "Go back" />
         </View>
 
@@ -286,51 +242,13 @@ export default function Creation({navigation}) {
         )}}
     }
 
-    function NextCreationStep()
-    {
-      var name= character_name
-      var level= lv
-      var stats= 
-      {
-        STR:str,
-        DEX:dex,
-        CON:con,
-        INT:int,
-        WIS:wis,
-        CHA:cha
-      }
 
-      navigation.navigate('Class Selection', {name, level, stats});
-    }
     
 
   // To co właściwie renderuje
     return (
         <View style={styles.container}>
-          <View>
-            <Text>Character Name:</Text>
-            <TextInput style={styles.character_name} value={character_name}  onChangeText={setName}/>
-          <KeyboardAvoidingView>
-            <Stat stat_name = {'LV.'} stat_count={lv} change_stat= {setLv} />
-
-            <View style = {styles.row}>
-              <Stat stat_name = {'STR'} stat_count={str} change_stat= {setStr} />
-              <Stat stat_name = {'CON'} stat_count={con} change_stat= {setCon} />
-            </View>
-            <View style = {styles.row}>
-              <Stat stat_name = {'DEX'} stat_count={dex} change_stat= {setDex} />
-              <Stat stat_name = {'WIS'} stat_count={wis} change_stat= {setWis} />
-            </View>
-            <View style = {styles.row}>
-              <Stat stat_name = {'INT'} stat_count={int} change_stat= {setInt} />
-              <Stat stat_name = {'CHA'} stat_count={cha} change_stat= {setCha} />
-            </View>
-          <Button 
-            onPress={() => NextCreationStep()} 
-            title = "Save stats" 
-            disabled={character_name == '' ? true: false}/>
-          </KeyboardAvoidingView>
-          </View>
+            <Creation_step></Creation_step>
         </View>   
       );
 }

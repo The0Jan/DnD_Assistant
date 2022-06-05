@@ -5,14 +5,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Home({navigation}) {
     const [all_characters, setCharacters] = useState([]);
+    let isMounted = true;
+
 
     useEffect(() => {
         AsyncStorage.getAllKeys()
         .then((value) => {
+          if(isMounted)
+          {
           let parsed_keys = []
           value.forEach((item,index) => {parsed_keys[index] = JSON.parse(item)})
           setCharacters(parsed_keys)
-        })
+          }
+        });
+        return () => {
+          isMounted = false;
+        };
     });
 
     function inspect_sheet(character){
