@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View, KeyboardAvoidingView, TextInput, Button, Pressable } from 'react-native';
+import { StyleSheet, Text, View, KeyboardAvoidingView, TextInput, Button, Pressable} from 'react-native';
 import { useState } from 'react';
 
 
-export default function Creation({navigation}) {
+export default function EditCharacter({navigation}) {
     const [str, setStr] = useState(10);
     const [dex, setDex] = useState(10);
     const [con, setCon] = useState(10);

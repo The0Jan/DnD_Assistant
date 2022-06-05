@@ -3,7 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import  Modal  from 'react-native-modal';
 import { useEffect, useState } from 'react';
 
-export default function Abilities({route, navigation}) {
+export default function Subclass({route, navigation}) {
   const [isModalVisible, setModalVisible] = useState(false)
   const [lookedUp, setLookedUp] = useState([]);
 
