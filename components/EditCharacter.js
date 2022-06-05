@@ -112,11 +112,23 @@ export default function EditCharacter({route, navigation}) {
         WIS:wis,
         CHA:cha
       }
-
+      my_character.level = level;
+      my_character.stats = stats;
+      storeData(my_character)
       
       navigation.navigate('Character', {character});
     }
-    
+
+    const storeData = async(value) =>{
+        try {
+          const key = JSON.stringify(character)
+          const JValue = JSON.stringify(value)
+          await AsyncStorage.setItem(key, JValue)
+        } catch(e){
+          console.log(e)
+        }
+      }
+
     return (
         <View style={styles.container}>
           <View style={{height:"90%"}}>
