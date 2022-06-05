@@ -1,18 +1,33 @@
 import { StyleSheet, Text, View, KeyboardAvoidingView, TextInput, Button, Pressable} from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function EditCharacter({route, navigation}) {
-    const [str, setStr] = useState(10);
-    const [dex, setDex] = useState(10);
-    const [con, setCon] = useState(10);
-    const [wis, setWis] = useState(10);
-    const [int, setInt] = useState(10);
-    const [cha, setCha] = useState(10);
+    const {my_character, character} = route.params;
+    const [str, setStr] = useState();
+    const [dex, setDex] = useState();
+    const [con, setCon] = useState();
+    const [wis, setWis] = useState();
+    const [int, setInt] = useState();
+    const [cha, setCha] = useState();
 
-    const [lv, setLv] = useState(1);
-    const [character_name, setName] = useState('');
+    const [lv, setLv] = useState();
+    const [edit, setEdit] = useState(true);
 
+    useEffect(() => {
+        if(edit)
+        {
+            setStr(my_character.stats.STR);
+            setDex(my_character.stats.DEX);
+            setCon(my_character.stats.CON);
+            setWis(my_character.stats.WIS);
+            setInt(my_character.stats.INT);
+            setCha(my_character.stats.CHA);
+            setLv(my_character.level);
+            setEdit(false);
+        }
+        });
 
     // ###################################################
     // STAT SECTION 
@@ -87,7 +102,6 @@ export default function EditCharacter({route, navigation}) {
 
     function NextCreationStep()
     {
-      var name= character_name
       var level= lv
       var stats= 
       {
@@ -98,7 +112,9 @@ export default function EditCharacter({route, navigation}) {
         WIS:wis,
         CHA:cha
       }
-      navigation.navigate('Class Selection', {name, level, stats});
+
+      
+      navigation.navigate('Character', {character});
     }
     
     return (
@@ -116,17 +132,16 @@ export default function EditCharacter({route, navigation}) {
           alignContent:'center'}}>
 
 
-            <View style={{alignItems:'center',alignSelf:'center', flexWrap:'wrap'}}>
-              <TextInput style={{      
-                                borderRadius:10,
-                                backgroundColor:'#FFFF',
-                                fontSize:32,
-                                flexShrink:10,
-                                marginRight:10,
-                                marginLeft:10}} 
-                        placeholder= "Your character name ..."  
-                        value={character_name}  
-                        onChangeText={setName}/>
+            <View style={{      
+                        borderRadius:10,
+                        backgroundColor:'#FFFF',
+                        fontSize:32,
+                        marginRight:10,
+                        marginLeft:10,
+                        alignItems:'center'}}>
+              <Text style={{fontSize:32, marginLeft:10, marginRight:10}}>
+                  {my_character.name}
+              </Text>
             </View>
 
           </View>
@@ -148,8 +163,7 @@ export default function EditCharacter({route, navigation}) {
           <View style={{borderRadius:5, margin:10 }}>
             <Button 
               onPress={() => NextCreationStep()} 
-              title = "Save stats" 
-              disabled={character_name == '' ? true: false}/>
+              title = "Save changes"/>
           </View>
           </KeyboardAvoidingView>
 
