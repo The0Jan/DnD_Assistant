@@ -7,7 +7,7 @@ import Creation from './components/Creation';
 import Abilities from './components/Abilities';
 import Subclass from './components/Subclass';
 import ClassSelection from './components/ClassSelection';
-
+import EditCharacter from './components/EditCharacter';
 
 const Stack = createNativeStackNavigator()
 
@@ -21,6 +21,7 @@ export default function App() {
         <Stack.Screen name="Abilities" component={Abilities} />
         <Stack.Screen name="Subclass" component={Subclass} />
         <Stack.Screen name="Class Selection" component={ClassSelection} />
+        <Stack.Screen name="Edit Character" component={EditCharacter} />
       </Stack.Navigator>
     </NavigationContainer>
   );

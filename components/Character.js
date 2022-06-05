@@ -101,7 +101,7 @@ export default function Character({route, navigation}) {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={()=>navigation.navigate('Abilities', {character})}>
+        <TouchableOpacity onPress={()=>navigation.navigate('Edit Character', {character})}>
           <View style={styles.button}>
             <Text style={{color:'white', fontSize:20}}>EDIT</Text>
           </View>

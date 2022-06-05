@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, KeyboardAvoidingView, TextInput, Button, Pressa
 import { useState } from 'react';
 
 
-export default function EditCharacter({navigation}) {
+export default function EditCharacter({route, navigation}) {
     const [str, setStr] = useState(10);
     const [dex, setDex] = useState(10);
     const [con, setCon] = useState(10);
