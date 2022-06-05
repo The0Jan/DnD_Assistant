@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View, KeyboardAvoidingView, TextInput, Button, Pressable, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Creation({navigation}) {
@@ -15,17 +14,6 @@ export default function Creation({navigation}) {
     const [character_name, setName] = useState('');
 
 
-
-    const [selectedClass, setClass] = useState('');
-    const [selectedSubclass, setSubclass] = useState('');
-
-    const [json, setJson] = useState([]);
-    const [ready, setReady] = useState(false);
-
-    const [step, setStep] = useState(0);
-    
-
-
     // ###################################################
     // STAT SECTION 
     // ###################################################
@@ -38,7 +26,6 @@ export default function Creation({navigation}) {
       var new_stat = stat - 1;
       changeStat(new_stat);
     }
-
 
     const Stat = (prop) => {
 
@@ -79,213 +66,6 @@ export default function Creation({navigation}) {
       )
     }
 
-    // ###################################################
-    // CLASSES SECTION 
-    // ###################################################
-  const CLASSES = [
-  { name:"barbarian"},
-  { name:"bard"},
-  { name:"cleric"},
-  { name:"druid"},
-  { name:"fighter"},
-  { name:"monk"},
-  { name:"paladin"},
-  { name:"ranger"},
-  { name:"rogue"},
-  { name:"sorcerer"},
-  { name:"warlock"},
-  { name:"wizard"}
-  ];
-
-
-  const Item = ({ item, onPress, backgroundColor, textColor }) => (
-    <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
-      <Text style={[styles.title, textColor]}>{item.name}</Text>
-    </TouchableOpacity>
-  );
-
-  const renderClass = ({ item }) => {
-    const backgroundColor = item.name === selectedClass ? "#778899" : "#D3D3D3";
-    const color = item.name === selectedClass ? 'white' : 'black';
-  
-    return (
-      <Item
-        item={item}
-        onPress={() => setClass(item.name)}
-        backgroundColor={{ backgroundColor }}
-        textColor={{ color }}
-      />
-    );
-    };
-
-    // ###################################################
-    // SUBCLASS SECTION 
-    // ###################################################
-    
-    const renderSubclass = ({ item }) => {
-      const backgroundColor = item.name === selectedSubclass ? "#778899" : "#D3D3D3";
-      const color = item.name === selectedSubclass ? 'white' : 'black';
-    
-      return (
-        <Item
-          item={item}
-          onPress={() => setSubclass(item.name)}
-          backgroundColor={{ backgroundColor }}
-          textColor={{ color }}
-        />
-      );
-      };
-
-
-
-    // ###################################################
-    // ALL SECTION 
-    // ###################################################
-
-    function getJson(){
-      fetch(`https://5e.tools/data/class/class-${selectedClass}.json`, {method: 'GET'})
-      .then( (response) => response.json())
-      .then( (responseJson) => {setJson(responseJson)})
-      .then( () => setReady(true))
-    }
-
-    const storeData = async(value) =>{
-      try {
-        const keyed = { name :value.name,class: value.class[0].name}
-        const key = JSON.stringify(keyed)
-        const JValue = JSON.stringify(value)
-        await AsyncStorage.setItem(key, JValue)
-      } catch(e){
-        console.log(e)
-      }
-    }
-
-    function generateSheet(){
-      var sheet = {
-        name: character_name,
-        level: lv,
-        stats: 
-        {
-          STR:str,
-          DEX:dex,
-          CON:con,
-          INT:int,
-          WIS:wis,
-          CHA:cha
-        },
-        class: json.class,
-        subclass: selectedSubclass,
-        classFeatures: json.classFeature,
-        subclassFeatures: []
-      };
-
-      var sub_found;
-      for (var suby in json.subclass){
-
-        if (json.subclass[suby].name == selectedSubclass){
-          sub_found = json.subclass[suby].shortName;
-        }
-      }
-      
-      for (var feat in json.subclassFeature){
-        if(json.subclassFeature[feat].subclassShortName == sub_found){
-          sheet.subclassFeatures.push(json.subclassFeature[feat]);
-        }
-      }
-
-      storeData(sheet);
-    }
-
-    function Creation_step(){
-      if (step == 0){
-      return(
-      <View>
-        <Text>Character Name:</Text>
-        <TextInput style={styles.character_name} value={character_name}  onChangeText={setName}/>
-      <KeyboardAvoidingView>
-        <Stat stat_name = {'LV.'} stat_count={lv} change_stat= {setLv} />
-
-        <View style = {styles.row}>
-          <Stat stat_name = {'STR'} stat_count={str} change_stat= {setStr} />
-          <Stat stat_name = {'CON'} stat_count={con} change_stat= {setCon} />
-        </View>
-        <View style = {styles.row}>
-          <Stat stat_name = {'DEX'} stat_count={dex} change_stat= {setDex} />
-          <Stat stat_name = {'WIS'} stat_count={wis} change_stat= {setWis} />
-        </View>
-        <View style = {styles.row}>
-          <Stat stat_name = {'INT'} stat_count={int} change_stat= {setInt} />
-          <Stat stat_name = {'CHA'} stat_count={cha} change_stat= {setCha} />
-        </View>
-      <Button 
-        onPress={() => setStep(1)} 
-        title = "Save stats" 
-        disabled={character_name == '' ? true: false}/>
-      </KeyboardAvoidingView>
-      </View>
-      )}
-      else if(step == 1) {
-
-
-      return(
-      <SafeAreaView style={styles.container}>
-        <FlatList
-          data={CLASSES}
-          renderItem={renderClass}
-          keyExtractor={(item) => item.name}
-          extraData={selectedClass}
-        />
-
-      <View style={{marginBottom:5, borderRadius:20, marginLeft:5,}}>
-        <Button 
-          onPress={() => {setStep(2); getJson()}} 
-          title = "Save Class"
-          disabled = {selectedClass == '' ? true: false}/>
-      </View>
-
-      <View style={{borderRadius:20, marginLeft:5,}}>
-      <Button
-        onPress={() => setStep(0)}
-        title = "Go back" />
-      </View>
-
-      </SafeAreaView>
-      )}
-      else if(step ==2 ){
-      
-        if(ready != true){
-          return (
-          <Text>
-          {"Loading..."}
-          </Text>
-          )}
-        else{
-         return(
-
-        <SafeAreaView style={styles.container}>
-          <FlatList
-            data={json.subclass}
-            renderItem={renderSubclass}
-            keyExtractor={(item) => item.name}
-            extraData={selectedSubclass}
-          />
-        
-        <View style={{marginBottom:5, borderRadius:20, marginLeft:5,}}>
-          <Button 
-            onPress={() => {generateSheet(); navigation.navigate('Home') }} 
-            title = "Create Character Sheet"
-            disabled = {selectedSubclass == '' ? true: false}/>
-          </View>
-          <View style={{borderRadius:20, marginLeft:5,}}>
-          <Button
-            onPress={() => setStep(1)}
-            title = "Go back" />
-        </View>
-
-        </SafeAreaView>
-        )}}
-    }
-
     function NextCreationStep()
     {
       var name= character_name
@@ -299,12 +79,9 @@ export default function Creation({navigation}) {
         WIS:wis,
         CHA:cha
       }
-
       navigation.navigate('Class Selection', {name, level, stats});
     }
     
-
-  // To co właściwie renderuje
     return (
         <View style={styles.container}>
           <View>
@@ -343,6 +120,7 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
     },
     character_name:{},
+
     stat:{
       backgroundColor: '#ece4e2',
       padding: 10,
@@ -383,15 +161,8 @@ const styles = StyleSheet.create({
       marginLeft:15,
       color: '#ef1e1e'
     },
-    item: {
-      padding: 20,
-      marginVertical: 8,
-      marginHorizontal: 16,
-      borderRadius:10
-    },
-    title: {
-      fontSize: 32,
-    },
+
+
     row: {
       flexDirection: 'row'
     }
