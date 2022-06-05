@@ -11,7 +11,6 @@ export default function ClassSelection({route, navigation}) {
 
     const {name, level, stats} = route.params;
 
-    const [character_name, setName] = useState('');
     const [selectedClass, setClass] = useState('');
     const [selectedSubclass, setSubclass] = useState('');
 
@@ -21,77 +20,23 @@ export default function ClassSelection({route, navigation}) {
     const [step, setStep] = useState(0);
     
 
-
-    // ###################################################
-    // STAT SECTION 
-    // ###################################################
-    function add(stat, changeStat){
-      var new_stat = stat + 1;
-      changeStat(new_stat);
-    }
-
-    function sub(stat, changeStat){
-      var new_stat = stat - 1;
-      changeStat(new_stat);
-    }
-
-
-    const Stat = (prop) => {
-
-      let plus = false;
-      if (prop.stat_count >= 20){
-        plus = true;
-      }
-
-      let minus = false;
-      if (prop.stat_count <= 0){
-        minus = true;
-      }
-
-      return (
-      <View style = {styles.stat}>
-        <Text style = {styles.name}> {prop.stat_name}</Text>
-        <Text style = {styles.count}> {prop.stat_count}</Text>
-
-        <Pressable 
-          style= {styles.up} 
-          onPress={ () => add(prop.stat_count, prop.change_stat)}
-          disabled = {plus}>
-             <Text>
-               {"+"}
-             </Text>
-        </Pressable>
-
-        <Pressable 
-          style= {styles.down} 
-          onPress={ () => sub(prop.stat_count, prop.change_stat)}
-          disabled = {minus}>
-             <Text>
-               {"-"}
-             </Text>
-        </Pressable>
-
-      </View>
-      )
-    }
-
     // ###################################################
     // CLASSES SECTION 
     // ###################################################
-  const CLASSES = [
-  { name:"barbarian"},
-  { name:"bard"},
-  { name:"cleric"},
-  { name:"druid"},
-  { name:"fighter"},
-  { name:"monk"},
-  { name:"paladin"},
-  { name:"ranger"},
-  { name:"rogue"},
-  { name:"sorcerer"},
-  { name:"warlock"},
-  { name:"wizard"}
-  ];
+    const CLASSES = [
+    { name:"barbarian"},
+    { name:"bard"},
+    { name:"cleric"},
+    { name:"druid"},
+    { name:"fighter"},
+    { name:"monk"},
+    { name:"paladin"},
+    { name:"ranger"},
+    { name:"rogue"},
+    { name:"sorcerer"},
+    { name:"warlock"},
+    { name:"wizard"}
+    ];
 
 
   const Item = ({ item, onPress, backgroundColor, textColor }) => (
@@ -186,8 +131,6 @@ export default function ClassSelection({route, navigation}) {
 
     function Creation_step(){
     if(step == 0) {
-
-
       return(
       <SafeAreaView style={styles.container}>
         <FlatList
@@ -197,16 +140,15 @@ export default function ClassSelection({route, navigation}) {
           extraData={selectedClass}
         />
 
-      <View style={{marginBottom:5, borderRadius:20, marginLeft:5,}}>
+        <View style={{marginBottom:5, borderRadius:20, marginLeft:5, marginRight:5}}>
         <Button 
           onPress={() => {setStep(1); getJson()}} 
           title = "Save Class"
           disabled = {selectedClass == '' ? true: false}/>
       </View>
-
-
       </SafeAreaView>
       )}
+
       else if(step ==1 ){
       
         if(ready != true){
@@ -226,13 +168,13 @@ export default function ClassSelection({route, navigation}) {
             extraData={selectedSubclass}
           />
         
-        <View style={{marginBottom:5, borderRadius:20, marginLeft:5,}}>
+        <View style={{marginBottom:5, borderRadius:20, marginLeft:5, marginRight:5}}>
           <Button 
             onPress={() => {generateSheet(); navigation.navigate('Home') }} 
             title = "Create Character Sheet"
             disabled = {selectedSubclass == '' ? true: false}/>
           </View>
-          <View style={{borderRadius:20, marginLeft:5,}}>
+          <View style={{borderRadius:20, marginLeft:5,marginRight:5}}>
           <Button
             onPress={() => setStep(0)}
             title = "Go back" />
@@ -242,10 +184,6 @@ export default function ClassSelection({route, navigation}) {
         )}}
     }
 
-
-    
-
-  // To co właściwie renderuje
     return (
         <View style={styles.container}>
             <Creation_step></Creation_step>
@@ -253,54 +191,16 @@ export default function ClassSelection({route, navigation}) {
       );
 }
 
-
-
 const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#fff',
     },
-    character_name:{},
-    stat:{
-      backgroundColor: '#ece4e2',
-      padding: 10,
-      borderRadius: 10,
-      flexDirection: 'row',
-      alignContent: 'center',
-      justifyContent: 'space-between',
-      marginBottom: 20
-  },
+
     name:{
       marginRight: 15,
     },
-    count:{
-      width: 24,
-      height: 24,
-      backgroundColor: '#55BCF6',
-      opacity: 0.6,
-      borderRadius: 5,
-      marginRight: 15
-  },
-    up:{
-      width: 24,
-      height: 24,
-      backgroundColor: '#55BCF6',
-      opacity: 0.6,
-      borderRadius: 5,
-      marginRight: 15,
-      marginLeft:15,
-      color: '#ef1e1e'
-    },
-    down:{
-      width: 24,
-      height: 24,
-      backgroundColor: '#55BCF6',
-      opacity: 0.6,
-      borderRadius: 5,
-      marginRight: 15,
-      marginLeft:15,
-      color: '#ef1e1e'
-    },
+
     item: {
       padding: 20,
       marginVertical: 8,
@@ -310,7 +210,5 @@ const styles = StyleSheet.create({
     title: {
       fontSize: 32,
     },
-    row: {
-      flexDirection: 'row'
-    }
+
   });

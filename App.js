@@ -8,6 +8,7 @@ import Abilities from './components/Abilities';
 import Subclass from './components/Subclass';
 import ClassSelection from './components/ClassSelection';
 
+
 const Stack = createNativeStackNavigator()
 
 export default function App() {
