@@ -7,19 +7,12 @@ export default function Home({navigation}) {
     const [all_characters, setCharacters] = useState([]);
 
     useEffect(() => {
-      async function fetchSheets(){
-        try {
-          const keys = await AsyncStorage.getAllKeys()
-
-          const parsed_keys = []
-          keys.forEach((item,index) => {parsed_keys[index] = JSON.parse(item)})
+        AsyncStorage.getAllKeys()
+        .then((value) => {
+          let parsed_keys = []
+          value.forEach((item,index) => {parsed_keys[index] = JSON.parse(item)})
           setCharacters(parsed_keys)
-        } 
-        catch(e) {
-          console.log(e)
-        }
-      }
-      fetchSheets()
+        })
     });
 
     function inspect_sheet(character){

@@ -30,15 +30,14 @@ const styles = StyleSheet.create({
         flexWrap:'wrap'
     },
     name:{
-        
-        
+        fontSize:24,
     },
     level:{
-        width: 24,
-        height: 24,
         backgroundColor: '#55BCF6',
         opacity: 0.6,
         borderRadius: 5,
-        marginRight: 15
+        marginRight: 15,
+        fontSize:24,
+        
     }
   });
