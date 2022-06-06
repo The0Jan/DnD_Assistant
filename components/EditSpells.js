@@ -31,7 +31,8 @@ export default function EditSpells({route, navigation}) {
     return(
       <ScrollView>
       {my_spells.map(element => {
-          return(Spell(element, 'grey'));
+          if(element.level == spellLevel)
+            return(Spell(element, 'grey'));
       })}
       </ScrollView>
     )

@@ -38,7 +38,9 @@ export default function Spells({route, navigation}) {
     return(
       <ScrollView>
       {my_spells.map(element => {
-          return(Spell(element, 'grey'));
+          
+        return(Spell(element, 'grey'));
+          
       })}
       </ScrollView>
     )
