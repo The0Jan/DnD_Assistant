@@ -8,7 +8,8 @@ import Abilities from './components/Abilities';
 import Subclass from './components/Subclass';
 import ClassSelection from './components/ClassSelection';
 import EditCharacter from './components/EditCharacter';
-
+import EditSpells from './components/EditSpells';
+import Spells from './components/Spells';
 const Stack = createNativeStackNavigator()
 
 export default function App() {
@@ -22,6 +23,8 @@ export default function App() {
         <Stack.Screen name="Subclass" component={Subclass} />
         <Stack.Screen name="Class Selection" component={ClassSelection} />
         <Stack.Screen name="Edit Character" component={EditCharacter} />
+        <Stack.Screen name="Edit Spells List" component={EditSpells} />
+        <Stack.Screen name="Spells" component={Spells} />
       </Stack.Navigator>
     </NavigationContainer>
   );
