@@ -1,3 +1,4 @@
+import { View } from "react-native";
 
 
 export default function Spells({route, navigation}) 
@@ -7,9 +8,9 @@ export default function Spells({route, navigation})
 
 
 
+return(
+    <View>
 
-
-
-
-    
+    </View>
+);
 }
