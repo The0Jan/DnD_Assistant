@@ -1,7 +1,8 @@
-import { StyleSheet, Text, View, Button, ScrollView,TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Picker, ScrollView,TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import  Modal  from 'react-native-modal';
 import { useState, useEffect } from 'react';
+import SelectDropdown from 'react-native-select-dropdown';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function EditSpells({route, navigation}) {
@@ -24,6 +25,30 @@ export default function EditSpells({route, navigation}) {
   });
 
 
+  function SaveSpell(spell)
+  {
+    AsyncStorage.getItem(meMage).then((value) => {
+        if(value != null){
+            let newSpellList = JSON.parse(value);
+            newSpellList.push(spell);
+            storeData(newSpellList)
+          }
+        else
+        {
+          let newSpellList = [spell];
+          storeData(newSpellList)
+        }
+    })  
+  }
+
+  const storeData = async(value) =>{
+      try {
+        const JValue = JSON.stringify(value)
+        await AsyncStorage.setItem(meMage, JValue)
+      } catch(e){
+        console.log(e)
+      }
+    }
 
 
   function Showcase_spells(my_spells)
@@ -69,6 +94,13 @@ export default function EditSpells({route, navigation}) {
           <View style={styles.AbilityRest}>
             <Text style={{fontSize:22}}>{ability.name}</Text>
           </View>
+          <TouchableOpacity onPress={() => SaveSpell(ability)}>
+            <View style={{marginLeft:4, marginRight:8, alignContent:'center', borderWidth:2, borderRadius:10, backgroundColor:'springgreen', borderColor:'springgreen'}}>
+              <Text style={{fontSize:24, color:'darkslategray'}}>
+                ADD
+              </Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </TouchableOpacity>
     )
@@ -135,11 +167,26 @@ export default function EditSpells({route, navigation}) {
       </View>
     )
   }
-
+  const spells = ["Cantrip", "Level 1", "Level 2", "Level 3","Level 4","Level 5","Level 6","Level 7","Level 8","Level 9"];
   return (
     <View style={styles.container}>
       <SafeAreaView>
-        {Showcase_spells(avaibleSpells)}
+        <View style={{alignItems:'center', marginBottom:10}}>
+          <SelectDropdown
+          dropdownStyle={{backgroundColor:'white'}}
+	        data={spells}
+          defaultButtonText="Select spell level"
+	        onSelect={(selectedItem, index) => {
+            setLevel(index);
+	        }}
+	        buttonTextAfterSelection={(selectedItem, index) => {
+	        	return selectedItem
+	        }}
+	        rowTextForSelection={(item, index) => {
+	        	return item
+	        }}/>
+        </View>
+      {Showcase_spells(avaibleSpells)}
       </SafeAreaView>
       {ShowModal()}
       <View style = {styles.button_create}>
@@ -199,7 +246,7 @@ const styles = StyleSheet.create({
     AbilityRest:{
       borderRadius:5,
       backgroundColor:'#FFFF',
-      width:"80%",
+      width:"60%",
       alignItems:'center'
     }
 
