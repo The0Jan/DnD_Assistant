@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View, Picker, ScrollView,TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView,TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import  Modal  from 'react-native-modal';
 import { useState, useEffect } from 'react';
 import SelectDropdown from 'react-native-select-dropdown';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function EditSpells({route, navigation}) {
+export default function EditSpells({route}) {
   const [isModalVisible, setModalVisible] = useState(false)
   const [lookedUp, setLookedUp] = useState([]);
   const [avaibleSpells, setSpells] = useState([]);
@@ -55,9 +55,9 @@ export default function EditSpells({route, navigation}) {
   {
     return(
       <ScrollView>
-      {my_spells.map(element => {
+      {my_spells.map((element, index) => {
           if(element.level == spellLevel)
-            return(Spell(element, 'grey'));
+            return(Spell(element, 'grey', index));
       })}
       </ScrollView>
     )
@@ -69,7 +69,7 @@ export default function EditSpells({route, navigation}) {
     setLookedUp(ability_text);
   }
 
-  function Spell(ability, color)
+  function Spell(ability, color, index)
   {
     
     const statistics = StyleSheet.create({
@@ -86,7 +86,7 @@ export default function EditSpells({route, navigation}) {
       },
     })
     return (
-      <TouchableOpacity onPress={()=>SetUpModal(ability.entries) }>
+      <TouchableOpacity onPress={()=>SetUpModal(ability.entries)} key={index}>
         <View style={statistics.StatRow}>
           <View style={styles.AbilityBox}>
             <Text style={{fontSize:22, color:'white'}}>{ability.level}</Text>

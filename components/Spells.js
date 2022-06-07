@@ -84,7 +84,7 @@ export default function Spells({route, navigation}) {
       },
     })
     return (
-      <TouchableOpacity onPress={()=>SetUpModal(ability.entries) }>
+      <TouchableOpacity onPress={()=>SetUpModal(ability.entries) } key={index}>
         <View style={statistics.StatRow}>
           <View style={styles.AbilityBox}>
             <Text style={{fontSize:22, color:'white'}}>{ability.level}</Text>
