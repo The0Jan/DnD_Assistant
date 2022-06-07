@@ -39,8 +39,8 @@ export default function ClassSelection({route, navigation}) {
     ];
 
 
-  const Item = ({ item, onPress, backgroundColor, textColor }) => (
-    <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
+  const Item = ({ item, onPress, backgroundColor, textColor, key }) => (
+    <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]} key={key}>
       <Text style={[styles.title, textColor]}>{item.name}</Text>
     </TouchableOpacity>
   );
@@ -68,7 +68,7 @@ export default function ClassSelection({route, navigation}) {
       const color = item.name === selectedSubclass ? 'white' : 'black';
     
       return (
-        <Item
+        <Item 
           item={item}
           onPress={() => setSubclass(item.name)}
           backgroundColor={{ backgroundColor }}
@@ -136,7 +136,7 @@ export default function ClassSelection({route, navigation}) {
         <FlatList
           data={CLASSES}
           renderItem={renderClass}
-          keyExtractor={(item) => item.name}
+          keyExtractor={(item, index) => (item.name, index)}
           extraData={selectedClass}
         />
 
@@ -164,7 +164,7 @@ export default function ClassSelection({route, navigation}) {
           <FlatList
             data={json.subclass}
             renderItem={renderSubclass}
-            keyExtractor={(item) => item.name}
+            keyExtractor={(item, index) => index.toString()}
             extraData={selectedSubclass}
           />
         
