@@ -33,15 +33,29 @@ export default function Spells({route, navigation}) {
   });
 
 
+  function DeleteSpell(index)
+  {
+    meSpells.splice(index, 1);
+    
+    storeData(meSpells);
+  }
 
+  const storeData = async(value) =>{
+      try {
+        const JValue = JSON.stringify(value)
+        await AsyncStorage.setItem(meMage, JValue)
+      } catch(e){
+        console.log(e)
+      }
+    }
 
   function Showcase_spells(my_spells)
   {
     return(
       <ScrollView>
-      {my_spells.map(element => {
+      {my_spells.map((element,index) => {
           if(element.level == spellLevel)
-            return(Spell(element, 'grey'));
+            return(Spell(element,index, 'grey'));
       })}
       </ScrollView>
     )
@@ -53,7 +67,7 @@ export default function Spells({route, navigation}) {
     setLookedUp(ability_text);
   }
 
-  function Spell(ability, color)
+  function Spell(ability,index, color)
   {
     
     const statistics = StyleSheet.create({
@@ -78,7 +92,7 @@ export default function Spells({route, navigation}) {
           <View style={styles.AbilityRest}>
             <Text style={{fontSize:22}}>{ability.name}</Text>
           </View>
-          <TouchableOpacity onPress={() => DeleteSpell(ability)}>
+          <TouchableOpacity onPress={() => DeleteSpell(index)}>
             <View style={{marginLeft:4, marginRight:8, alignContent:'center', borderWidth:2, borderRadius:10, backgroundColor:'firebrick', borderColor:'firebrick'}}>
               <Text style={{fontSize:24, color:'white'}}>
                 DELETE
