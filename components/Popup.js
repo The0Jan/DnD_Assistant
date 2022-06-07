@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, useState } from 'react-native';
+import { Text, View, useState } from 'react-native';
 import { Modal } from 'react-native-modal';
 
 export default function Popup()
