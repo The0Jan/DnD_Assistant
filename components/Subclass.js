@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Button, ScrollView,TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import  Modal  from 'react-native-modal';
-import { useEffect, useState } from 'react';
+import {useState} from 'react';
 
 export default function Subclass({route, navigation}) {
   const [isModalVisible, setModalVisible] = useState(false)
@@ -13,10 +13,10 @@ export default function Subclass({route, navigation}) {
   {
     return(
       <ScrollView>
-      {class_skills.map(element => {
+      {class_skills.map((element, index) => {
         if(element.level <= my_character.level)
         {
-          return(Stat(element, 'grey'));
+          return(Stat(element, 'grey', index));
         }
       })}
       </ScrollView>
@@ -29,7 +29,7 @@ export default function Subclass({route, navigation}) {
     setLookedUp(ability_text);
   }
 
-  function Stat(ability, color)
+  function Stat(ability, color, index)
   {
     
     const statistics = StyleSheet.create({
@@ -46,7 +46,7 @@ export default function Subclass({route, navigation}) {
       },
     })
     return (
-      <TouchableOpacity onPress={()=>SetUpModal(ability.entries) }>
+      <TouchableOpacity onPress={()=>SetUpModal(ability.entries)} key={index}>
         <View style={statistics.StatRow}>
           <View style={styles.AbilityBox}>
             <Text style={{fontSize:22, color:'white'}}>{ability.level}</Text>
