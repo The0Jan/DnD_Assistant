@@ -4,7 +4,7 @@
     "slug": "DnD_Assistant",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/dndHelper.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
