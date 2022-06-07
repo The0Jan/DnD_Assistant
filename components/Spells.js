@@ -3,12 +3,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import  Modal  from 'react-native-modal';
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import SelectDropdown from 'react-native-select-dropdown';
 
 export default function Spells({route, navigation}) {
   const [isModalVisible, setModalVisible] = useState(false)
   const [lookedUp, setLookedUp] = useState([]);
   const [meMage, setMage] = useState('');
   const [meSpells, setSpells] = useState([]);
+  const [spellLevel, setLevel] = useState(0);
 
   const {character} = route.params;
 
@@ -38,9 +40,8 @@ export default function Spells({route, navigation}) {
     return(
       <ScrollView>
       {my_spells.map(element => {
-          
-        return(Spell(element, 'grey'));
-          
+          if(element.level == spellLevel)
+            return(Spell(element, 'grey'));
       })}
       </ScrollView>
     )
@@ -77,6 +78,13 @@ export default function Spells({route, navigation}) {
           <View style={styles.AbilityRest}>
             <Text style={{fontSize:22}}>{ability.name}</Text>
           </View>
+          <TouchableOpacity onPress={() => DeleteSpell(ability)}>
+            <View style={{marginLeft:4, marginRight:8, alignContent:'center', borderWidth:2, borderRadius:10, backgroundColor:'firebrick', borderColor:'firebrick'}}>
+              <Text style={{fontSize:24, color:'white'}}>
+                DELETE
+              </Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </TouchableOpacity>
     )
@@ -144,18 +152,30 @@ export default function Spells({route, navigation}) {
     )
   }
 
+  const spells = ["Cantrip", "Level 1", "Level 2", "Level 3","Level 4","Level 5","Level 6","Level 7","Level 8","Level 9"];
   return (
     <View style={styles.container}>
       <SafeAreaView>
-
-
-        {Showcase_spells(meSpells)}
+        <View style={{alignItems:'center', marginBottom:10}}>
+          <SelectDropdown
+          dropdownStyle={{backgroundColor:'white'}}
+	        data={spells}
+          defaultButtonText="Select spell level"
+	        onSelect={(selectedItem, index) => {
+            setLevel(index);
+	        }}
+	        buttonTextAfterSelection={(selectedItem, index) => {
+	        	return selectedItem
+	        }}
+	        rowTextForSelection={(item, index) => {
+	        	return item
+	        }}/>
+        </View>
+      {Showcase_spells(meSpells)}
       </SafeAreaView>
-
       {ShowModal()}
-
       <View style = {styles.button_create}>
-        <Button 
+      <Button 
           title="Get New Spells"
           onPress = { () =>   navigation.navigate('Edit Spells List', {meMage})}
           />
@@ -215,7 +235,7 @@ const styles = StyleSheet.create({
     AbilityRest:{
       borderRadius:5,
       backgroundColor:'#FFFF',
-      width:"80%",
+      width:"60%",
       alignItems:'center'
     }
 
