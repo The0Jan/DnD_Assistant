@@ -14,7 +14,13 @@ export default function Home({navigation}) {
           if(isMounted)
           {
           let parsed_keys = []
-          value.forEach((item,index) => {parsed_keys[index] = JSON.parse(item)})
+          value.forEach((item,index) => {
+            let parsed_item = JSON.parse(item);
+            if(!parsed_item.hasOwnProperty("spells"))
+            {
+              parsed_keys.push(parsed_item);
+            }
+          })
           setCharacters(parsed_keys)
           }
         });

@@ -19,14 +19,14 @@ export default function Spells({route, navigation}) {
     
     if(meMage == '')
     {
-        var DoIMage = { name :character.name , class:character.class, spells:'yes'}
+        let DoIMage = { name :character.name , class:character.class, spells:'yes'}
         setMage(JSON.stringify(DoIMage))
     }
     else{
         AsyncStorage.getItem(meMage)
         .then((value) => {
             if(value != null){
-                var parsed = JSON.parse(value);
+                let parsed = JSON.parse(value);
                 setSpells(parsed)}
             })
     }

@@ -9,7 +9,7 @@ export default function Character({route, navigation}) {
   useEffect(() => {
     AsyncStorage.getItem(JSON.stringify(character))
     .then((value) => {
-      var parsed = JSON.parse(value);
+      let parsed = JSON.parse(value);
       setCharacter(parsed)})
   });
 
@@ -67,6 +67,8 @@ export default function Character({route, navigation}) {
   function removeItemValue(key) {
     try {
         AsyncStorage.removeItem(key);
+        let DoIMage = JSON.stringify({ name :character.name , class:character.class, spells:'yes'});
+        AsyncStorage.removeItem(DoIMage);
         return true;
     }
     catch(exception) {

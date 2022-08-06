@@ -18,12 +18,12 @@ export default function Creation({navigation}) {
     // STAT SECTION 
     // ###################################################
     function add(stat, changeStat){
-      var new_stat = stat + 1;
+      let new_stat = stat + 1;
       changeStat(new_stat);
     }
 
     function sub(stat, changeStat){
-      var new_stat = stat - 1;
+      let new_stat = stat - 1;
       changeStat(new_stat);
     }
 
@@ -87,9 +87,9 @@ export default function Creation({navigation}) {
 
     function NextCreationStep()
     {
-      var name= character_name
-      var level= lv
-      var stats= 
+      let name= character_name
+      let level= lv
+      let stats= 
       {
         STR:str,
         DEX:dex,

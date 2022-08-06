@@ -24,6 +24,7 @@ export default function ClassSelection({route, navigation}) {
     // CLASSES SECTION 
     // ###################################################
     const CLASSES = [
+    { name:"artificer"},
     { name:"barbarian"},
     { name:"bard"},
     { name:"cleric"},
@@ -102,7 +103,7 @@ export default function ClassSelection({route, navigation}) {
     }
 
     function generateSheet(){
-      var sheet = {
+      let sheet = {
         name: name,
         level: level,
         stats: stats,
@@ -112,7 +113,7 @@ export default function ClassSelection({route, navigation}) {
         subclassFeatures: []
       };
 
-      var sub_found;
+      let sub_found;
       for (var suby in json.subclass){
 
         if (json.subclass[suby].name == selectedSubclass){
